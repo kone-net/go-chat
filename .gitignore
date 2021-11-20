@@ -1,0 +1,24 @@
+bin/
+release/
+test/tmp/
+test/logs/
+logs
+doc/blueprint/
+*.iml
+*.swp
+*.log
+coverage.*
+y.output
+
+.DS_Store
+.vscode/
+.idea
+_tools/
+
+TestMarkdown2Html.html
+
+#test log
+test/logs
+
+#upload file
+static/img/*

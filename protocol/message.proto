@@ -1,0 +1,15 @@
+syntax = "proto3";
+package protocol;
+
+message Message {
+    string avatar = 1;
+    string fromUsername = 2;
+    string from = 3;
+    string to = 4;
+    string content = 5;
+    int32 contentType = 6;
+    string type = 7;
+    int32 messageType = 8;
+    string url = 9;
+    bytes file = 10;
+}
