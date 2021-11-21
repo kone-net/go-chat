@@ -63,7 +63,7 @@ func (s *Server) Start() {
 
 			if msg.To != "" {
 				// 一般消息，比如文本消息，视频文件消息等
-				if msg.ContentType >= constant.FILE && msg.ContentType <= constant.VIDEO {
+				if msg.ContentType >= constant.TEXT && msg.ContentType <= constant.VIDEO {
 					saveMessage(msg)
 					if msg.MessageType == constant.MESSAGE_TYPE_USER {
 						client, ok := s.Clients[msg.To]

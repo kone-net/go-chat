@@ -7,6 +7,7 @@ const (
 	MESSAGE_TYPE_USER = 1
 	MESSAGE_TYPE_GROUP = 2
 
+	TEXT = 1
 	FILE = 2
 	IMAGE = 3
 	AUDIO = 4
