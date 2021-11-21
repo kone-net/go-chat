@@ -33,14 +33,14 @@ func (c *Client) Read() {
 
 		msg := &protocol.Message{}
 		proto.Unmarshal(message, msg)
-		
+
 		// pong
 		if msg.Type == constant.HEAT_BEAT {
 			pong := &protocol.Message{
 				Content: constant.PONG,
 				Type:    constant.HEAT_BEAT,
 			}
-			pongByte, err2 :=proto.Marshal(pong)
+			pongByte, err2 := proto.Marshal(pong)
 			if nil != err2 {
 				log.Error("client marshal message error", log.Any("client marshal message error", err2.Error()))
 			}

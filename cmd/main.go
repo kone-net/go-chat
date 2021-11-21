@@ -1,8 +1,8 @@
 package main
 
 import (
-	"chat-room/global/log"
 	"chat-room/config"
+	"chat-room/global/log"
 	"chat-room/router"
 	"chat-room/server"
 	"go.uber.org/zap"

@@ -8,6 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 )
+
 // 获取分组列表
 func GetGroup(c *gin.Context) {
 	uuid := c.Param("uuid")

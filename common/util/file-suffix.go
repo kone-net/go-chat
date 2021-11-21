@@ -34,12 +34,12 @@ func init() {
 	fileTypeMap.Store("5374616E64617264204A", "mdb")  //MS Access (mdb)
 	fileTypeMap.Store("252150532D41646F6265", "ps")
 
-	fileTypeMap.Store("255044462d312e350d0a", "pdf")  //Adobe Acrobat (pdf)
-	fileTypeMap.Store("D0CF11E0", "xls")  //xls
-	fileTypeMap.Store("504B030414000600080000002100", "xlsx")  //xls
-	fileTypeMap.Store("d0cf11e0a1b11ae10000", "doc")  //MS Excel 注意：word、msi 和 excel的文件头一样
-	fileTypeMap.Store("504b0304140006000800", "docx")       //docx文件
-	fileTypeMap.Store("d0cf11e0a1b11ae10000", "wps")        //WPS文字wps、表格et、演示dps都是一样的
+	fileTypeMap.Store("255044462d312e350d0a", "pdf")          //Adobe Acrobat (pdf)
+	fileTypeMap.Store("D0CF11E0", "xls")                      //xls
+	fileTypeMap.Store("504B030414000600080000002100", "xlsx") //xls
+	fileTypeMap.Store("d0cf11e0a1b11ae10000", "doc")          //MS Excel 注意：word、msi 和 excel的文件头一样
+	fileTypeMap.Store("504b0304140006000800", "docx")         //docx文件
+	fileTypeMap.Store("d0cf11e0a1b11ae10000", "wps")          //WPS文字wps、表格et、演示dps都是一样的
 
 	fileTypeMap.Store("2e524d46000000120001", "rmvb") //rmvb/rm相同
 	fileTypeMap.Store("464c5601050000000900", "flv")  //flv与f4v相同
@@ -49,12 +49,11 @@ func init() {
 	fileTypeMap.Store("3026b2758e66cf11a6d9", "wmv") //wmv与asf相同
 	fileTypeMap.Store("52494646e27807005741", "wav") //Wave (wav)
 	fileTypeMap.Store("52494646246009005741", "wav") //Wave (wav)
-	fileTypeMap.Store("52494646", "wav") //Wave (wav)
-	
-	
+	fileTypeMap.Store("52494646", "wav")             //Wave (wav)
+
 	fileTypeMap.Store("52494646d07d60074156", "avi")
 	fileTypeMap.Store("1a45dfa3a34286810142", "webm")
-	
+
 	fileTypeMap.Store("4d546864000000060001", "mid") //MIDI (mid)
 	fileTypeMap.Store("504b0304140000000800", "zip")
 	fileTypeMap.Store("526172211a0700cf9073", "rar")

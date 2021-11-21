@@ -50,7 +50,6 @@ func ModifyUserInfo(c *gin.Context) {
 	c.JSON(http.StatusOK, response.SuccessMsg(nil))
 }
 
-
 func GetUserDetails(c *gin.Context) {
 	uuid := c.Param("uuid")
 

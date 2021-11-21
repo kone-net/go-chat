@@ -84,7 +84,7 @@ func (s *Server) Start() {
 						client.Send <- message
 					}
 				}
-				
+
 			} else {
 				// 无对应接受人员进行广播
 				for id, conn := range s.Clients {
