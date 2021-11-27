@@ -5,11 +5,11 @@ import (
 	"chat-room/dao/pool"
 	"chat-room/errors"
 	"chat-room/global/log"
-	"chat-room/model/response"
+	"chat-room/common/response"
 	"chat-room/protocol"
 
 	"chat-room/model"
-	"chat-room/model/request"
+	"chat-room/common/request"
 
 	"gorm.io/gorm"
 )

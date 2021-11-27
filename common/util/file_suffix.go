@@ -119,7 +119,7 @@ func GetFileType(fSrc []byte) string {
 }
 
 func GetContentTypeBySuffix(suffix string) int32 {
-	imgList := []string{"jpg", "png", "gif", "tif", "bmp", "dwg"}
+	imgList := []string{"jpeg", "jpg", "png", "gif", "tif", "bmp", "dwg"}
 	exists := arrays.Contains(imgList, suffix)
 	if exists >= 0 {
 		return constant.IMAGE

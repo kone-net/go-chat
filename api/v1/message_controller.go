@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"chat-room/global/log"
-	"chat-room/model/request"
-	"chat-room/response"
+	"chat-room/common/request"
+	"chat-room/common/response"
 	"chat-room/service"
 
 	"github.com/gin-gonic/gin"

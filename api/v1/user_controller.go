@@ -5,8 +5,8 @@ import (
 
 	"chat-room/global/log"
 	"chat-room/model"
-	"chat-room/model/request"
-	"chat-room/response"
+	"chat-room/common/request"
+	"chat-room/common/response"
 	"chat-room/service"
 
 	"github.com/gin-gonic/gin"
@@ -54,6 +54,13 @@ func GetUserDetails(c *gin.Context) {
 	uuid := c.Param("uuid")
 
 	c.JSON(http.StatusOK, response.SuccessMsg(service.UserService.GetUserDetails(uuid)))
+}
+
+// 通过用户名获取用户信息
+func GetUserOrGroupByName(c *gin.Context) {
+	name := c.Query("name")
+
+	c.JSON(http.StatusOK, response.SuccessMsg(service.UserService.GetUserOrGroupByName(name)))
 }
 
 func GetUserList(c *gin.Context) {

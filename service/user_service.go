@@ -3,11 +3,12 @@ package service
 import (
 	"time"
 
+	"chat-room/common/request"
+	"chat-room/common/response"
 	"chat-room/dao/pool"
 	"chat-room/errors"
 	"chat-room/global/log"
 	"chat-room/model"
-	"chat-room/model/request"
 
 	"github.com/google/uuid"
 )
@@ -70,6 +71,22 @@ func (u *userService) GetUserDetails(uuid string) model.User {
 	return *queryUser
 }
 
+// 通过名称查找群组或者用户
+func (u *userService) GetUserOrGroupByName(name string) response.SearchResponse {
+	var queryUser *model.User
+	db := pool.GetDB()
+	db.Select("uuid", "username", "nickname", "avatar").First(&queryUser, "username = ?", name)
+
+	var queryGroup *model.Group
+	db.Select("uuid", "name").First(&queryGroup, "name = ?", name)
+
+	search := response.SearchResponse{
+		User:  *queryUser,
+		Group: *queryGroup,
+	}
+	return search
+}
+
 func (u *userService) GetUserList(uuid string) []model.User {
 	db := pool.GetDB()
 
@@ -117,5 +134,19 @@ func (u *userService) AddFriend(userFriendRequest *request.FriendRequest) error 
 	db.Save(&userFriend)
 	log.Debug("userFriend", log.Any("userFriend", userFriend))
 
+	return nil
+}
+
+// 修改头像
+func (u *userService) ModifyUserAvatar(avatar string, userUuid string) error {
+	var queryUser *model.User
+	db := pool.GetDB()
+	db.First(&queryUser, "uuid = ?", userUuid)
+
+	if NULL_ID == queryUser.Id {
+		return errors.New("用户不存在")
+	}
+
+	db.Model(&queryUser).Update("avatar", avatar)
 	return nil
 }

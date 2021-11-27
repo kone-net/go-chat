@@ -163,6 +163,10 @@ func saveMessage(message *protocol.Message) {
 	} else if message.ContentType == 3 {
 		// 普通的文件二进制上传
 		fileSuffix := util.GetFileType(message.File)
+		nullStr := ""
+		if nullStr == fileSuffix {
+			fileSuffix = strings.ToLower(message.FileSuffix)
+		}
 		contentType := util.GetContentTypeBySuffix(fileSuffix)
 		url := uuid.New().String() + "." + fileSuffix
 		err := ioutil.WriteFile("static/img/"+url, message.File, 0666)

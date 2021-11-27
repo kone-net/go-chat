@@ -1,21 +1,27 @@
 [TOC]
-##go-chat
+
+
+## go-chat
 使用Go基于WebSocket的通讯聊天软件。
 
 ### 功能列表：
+* 登录注册
+* 修改头像
 * 群聊天
 * 群好友列表
 * 单人聊天
 * 添加好友
+* 添加群组
 * 文本消息
+* 剪切板图片
 * 图片消息
 * 文件发送
 * 语音消息
 * 视频消息
-* 屏幕共享
-* 视频聊天
+* 屏幕共享（基于图片）
+* 视频通话（基于WebRTC的p2p视频通话）
 
-##后端
+## 后端
 [代码仓库](https://github.com/kone-net/go-chat)
 go中协程是非常轻量级的。在每个client接入的时候，为每一个client开启一个协程，能够在单机实现更大的并发。同时go的channel，可以非常完美的解耦client接入和消息的转发等操作。
 
@@ -33,7 +39,7 @@ go中协程是非常轻量级的。在每个client接入的时候，为每一个
 * 数据库MySQL
 * 图片文件二进制操作
 
-##前端
+## 前端
 基于react,UI和基本组件是使用ant design。可以很方便搭建前端界面。
 
 界面选择单页框架可以更加方便写聊天界面，比如像消息提醒，可以在一个界面接受到消息进行提醒，不会因为换页面或者查看其他内容影响消息接受。
@@ -43,6 +49,7 @@ https://github.com/kone-net/go-chat-web
 
 ### 前端技术和框架
 * React
+* Redux状态管理
 * AntDesign
 * proto buffer的使用
 * WebSocket
@@ -53,15 +60,53 @@ https://github.com/kone-net/go-chat-web
 * 获取摄像头视频（mediaDevices）
 * 获取麦克风音频（Recorder）
 * 获取屏幕共享（mediaDevices）
+* WebRTC的p2p视频通话
 
 
 ### 截图
+* 语音，文字，图片，视频消息
 ![go-chat-panel](/static/screenshot/go-chat-panel.jpeg)
+
+* 视频通话
+![video-chat](/static/screenshot/video-chat.png)
+
+* 屏幕共享
+![screen-share](/static/screenshot/screen-share.png)
+
+## 消息协议
+### protocol buffer协议
+```go
+syntax = "proto3";
+package protocol;
+
+message Message {
+    string avatar = 1;       //头像
+    string fromUsername = 2; // 发送消息用户的用户名
+    string from = 3;         // 发送消息用户uuid
+    string to = 4;           // 发送给对端用户的uuid
+    string content = 5;      // 文本消息内容
+    int32 contentType = 6;   // 消息内容类型：1.文字 2.普通文件 3.图片 4.音频 5.视频 6.语音聊天 7.视频聊天
+    string type = 7;         // 如果是心跳消息，该内容为heatbeat
+    int32 messageType = 8;   // 消息类型，1.单聊 2.群聊
+    string url = 9;          // 图片，视频，语音的路径
+    string fileSuffix = 10;  // 文件后缀，如果通过二进制头不能解析文件后缀，使用该后缀
+    bytes file = 11;         // 如果是图片，文件，视频等的二进制
+}
+```
+### 选择协议原因
+通过消息体能看出，消息大部分都是字符串或者整型类型。通过json就可以进行传输。那为什么要选择google的protocol buffer进行传输呢？
+* 一方面传输快
+是因为protobuf序列化后的大小是json的10分之一，是xml格式的20分之一，但是性能却是它们的5~100倍.
+* 另一方面支持二进制
+当我们看到消息体最后一个字段，是定义的bytes，二进制类型。
+我们在传输图片，文件，视频等内容的时候，可以将文件直接通过socket消息进行传输。
+当然我们也可以将文件先通过http接口上传后，然后返回路径，再通过socket消息进行传输。但是这样只能实现固定大小文件的传输，如果我们是语音电话，或者视频电话的时候，就不能传输流。
 
 ## 快速运行
 ### 运行go程序
 go环境的基本配置
 ...
+
 拉取后端代码
 ```shell
 git clone https://github.com/kone-net/go-chat
@@ -351,3 +396,161 @@ func (s *Server) Start() {
 
 ```
 
+### 剪切板图片上传
+上传剪切板的文件，首先我们需要获取剪切板文件。
+如以下代码：
+* 通过在聊天输入框，绑定粘贴命令，获取粘贴板的内容。
+* 我们只获取文件信息，其他文字信息过滤掉。
+* 先获取文件的blob格式。
+* 通过FileReader，将blob转换为ArrayBuffer格式。
+* 将ArrayBuffer内容转换为Uint8Array二进制，放在消息体。
+* 通过protobuf将消息转换成对应协议。
+* 通过socket进行传输。
+* 最后，将本地的图片追加到聊天框里面。
+```javascript
+bindParse = () => {
+        document.getElementById("messageArea").addEventListener("paste", (e) => {
+            var data = e.clipboardData
+            if (!data.items) {
+                return;
+            }
+            var items = data.items
+
+            if (null == items || items.length <= 0) {
+                return;
+            }
+
+            let item = items[0]
+            if (item.kind !== 'file') {
+                return;
+            }
+            let blob = item.getAsFile()
+
+            let reader = new FileReader()
+            reader.readAsArrayBuffer(blob)
+
+            reader.onload = ((e) => {
+                let imgData = e.target.result
+
+                // 上传文件必须将ArrayBuffer转换为Uint8Array
+                let data = {
+                    fromUsername: localStorage.username,
+                    from: this.state.fromUser,
+                    to: this.state.toUser,
+                    messageType: this.state.messageType,
+                    content: this.state.value,
+                    contentType: 3,
+                    file: new Uint8Array(imgData)
+                }
+                let message = protobuf.lookup("protocol.Message")
+                const messagePB = message.create(data)
+                socket.send(message.encode(messagePB).finish())
+
+                this.appendImgToPanel(imgData)
+            })
+
+        }, false)
+    }
+```
+
+### 上传录制的视频
+上传语音同原理
+* 获取视频调用权限。
+* 通过mediaDevices获取视频流，或者音频流，或者屏幕分享的视频流。
+* this.recorder.start(1000)设定每秒返回一段流。
+* 通过MediaRecorder将流转换为二进制，存入dataChunks数组中。
+* 松开按钮后，将dataChunks中的数据合成一段二进制。
+* 通过FileReader，将blob转换为ArrayBuffer格式。
+* 将ArrayBuffer内容转换为Uint8Array二进制，放在消息体。
+* 通过protobuf将消息转换成对应协议。
+* 通过socket进行传输。
+* 最后，将本地的视频，音频追加到聊天框里面。
+
+**特别注意: 获取视频，音频，屏幕分享调用权限，必须是https协议或者是localhost，127.0.0.1 本地IP地址，所有本地测试可以开启几个浏览器，或者分别用这两个本地IP进行2tab测试**
+```javascript
+/**
+     * 当按下按钮时录制视频
+     */
+    dataChunks = [];
+    recorder = null;
+    startVideoRecord = (e) => {
+        navigator.getUserMedia = navigator.getUserMedia ||
+            navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia ||
+            navigator.msGetUserMedia; //获取媒体对象（这里指摄像头）
+
+        let preview = document.getElementById("preview");
+        this.setState({
+            isRecord: true
+        })
+
+        navigator.mediaDevices
+            .getUserMedia({
+                audio: true,
+                video: true,
+            }).then((stream) => {
+                preview.srcObject = stream;
+                this.recorder = new MediaRecorder(stream);
+
+                this.recorder.ondataavailable = (event) => {
+                    let data = event.data;
+                    this.dataChunks.push(data);
+                };
+                this.recorder.start(1000);
+            });
+    }
+
+    /**
+     * 松开按钮发送视频到服务器
+     * @param {事件} e 
+     */
+    stopVideoRecord = (e) => {
+        this.setState({
+            isRecord: false
+        })
+
+        let recordedBlob = new Blob(this.dataChunks, { type: "video/webm" });
+
+        let reader = new FileReader()
+        reader.readAsArrayBuffer(recordedBlob)
+
+        reader.onload = ((e) => {
+            let fileData = e.target.result
+
+            // 上传文件必须将ArrayBuffer转换为Uint8Array
+            let data = {
+                fromUsername: localStorage.username,
+                from: this.state.fromUser,
+                to: this.state.toUser,
+                messageType: this.state.messageType,
+                content: this.state.value,
+                contentType: 3,
+                file: new Uint8Array(fileData)
+            }
+            let message = protobuf.lookup("protocol.Message")
+            const messagePB = message.create(data)
+            socket.send(message.encode(messagePB).finish())
+        })
+
+        this.setState({
+            comments: [
+                ...this.state.comments,
+                {
+                    author: localStorage.username,
+                    avatar: this.state.user.avatar,
+                    content: <p><video src={URL.createObjectURL(recordedBlob)} controls autoPlay={false} preload="auto" width='200px' /></p>,
+                    datetime: moment().fromNow(),
+                },
+            ],
+        }, () => {
+            this.scrollToBottom()
+        })
+        if (this.recorder) {
+            this.recorder.stop()
+            this.recorder = null
+        }
+        let preview = document.getElementById("preview");
+        preview.srcObject.getTracks().forEach((track) => track.stop());
+        this.dataChunks = []
+    }
+```

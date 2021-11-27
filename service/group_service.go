@@ -3,7 +3,7 @@ package service
 import (
 	"chat-room/dao/pool"
 	"chat-room/errors"
-	"chat-room/model/response"
+	"chat-room/common/response"
 
 	"chat-room/model"
 
@@ -101,7 +101,7 @@ func (g *groupService) JoinGroup(groupUuid, userUuid string) error {
 		Nickname: nickname,
 		Mute:     0,
 	}
-	db.Save(groupMemberInsert)
+	db.Save(&groupMemberInsert)
 
 	return nil
 }

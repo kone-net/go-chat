@@ -2,7 +2,7 @@ package v1
 
 import (
 	"chat-room/model"
-	"chat-room/response"
+	"chat-room/common/response"
 	"chat-room/service"
 	"net/http"
 
