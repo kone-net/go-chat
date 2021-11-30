@@ -7,9 +7,10 @@ import (
 )
 
 type TomlConfig struct {
-	AppName string
-	MySQL   MySQLConfig
-	Log     LogConfig
+	AppName    string
+	MySQL      MySQLConfig
+	Log        LogConfig
+	StaticPath PathConfig
 }
 
 type MySQLConfig struct {
@@ -24,6 +25,10 @@ type MySQLConfig struct {
 type LogConfig struct {
 	Path  string
 	Level string
+}
+
+type PathConfig struct {
+	FilePath string
 }
 
 var c TomlConfig

@@ -1,15 +1,15 @@
 package service
 
 import (
-	"chat-room/common/constant"
-	"chat-room/dao/pool"
-	"chat-room/errors"
-	"chat-room/global/log"
-	"chat-room/common/response"
-	"chat-room/protocol"
+	"chat-room/pkg/common/constant"
+	"chat-room/internal/dao/pool"
+	"chat-room/pkg/errors"
+	"chat-room/pkg/global/log"
+	"chat-room/pkg/common/response"
+	"chat-room/pkg/protocol"
 
-	"chat-room/model"
-	"chat-room/common/request"
+	"chat-room/internal/model"
+	"chat-room/pkg/common/request"
 
 	"gorm.io/gorm"
 )

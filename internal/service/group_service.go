@@ -1,11 +1,11 @@
 package service
 
 import (
-	"chat-room/dao/pool"
-	"chat-room/errors"
-	"chat-room/common/response"
+	"chat-room/internal/dao/pool"
+	"chat-room/pkg/errors"
+	"chat-room/pkg/common/response"
 
-	"chat-room/model"
+	"chat-room/internal/model"
 
 	"github.com/google/uuid"
 )

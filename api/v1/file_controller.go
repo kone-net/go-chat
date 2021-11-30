@@ -5,9 +5,10 @@ import (
 	"net/http"
 	"strings"
 
-	"chat-room/global/log"
-	"chat-room/common/response"
-	"chat-room/service"
+	"chat-room/config"
+	"chat-room/internal/service"
+	"chat-room/pkg/common/response"
+	"chat-room/pkg/global/log"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -17,7 +18,7 @@ import (
 func GetFile(c *gin.Context) {
 	fileName := c.Param("fileName")
 	log.Info(fileName)
-	data, _ := ioutil.ReadFile("static/img/" + fileName)
+	data, _ := ioutil.ReadFile(config.GetConfig().StaticPath.FilePath + fileName)
 	c.Writer.Write(data)
 }
 
@@ -34,10 +35,10 @@ func SaveFile(c *gin.Context) {
 
 	newFileName := namePreffix + suffix
 
-	log.Info("file", log.Any("file name", "static/img/"+newFileName))
+	log.Info("file", log.Any("file name", config.GetConfig().StaticPath.FilePath + newFileName))
 	log.Info("userUuid", log.Any("userUuid name", userUuid))
 
-	c.SaveUploadedFile(file, "static/img/"+newFileName)
+	c.SaveUploadedFile(file, config.GetConfig().StaticPath.FilePath + newFileName)
 	err := service.UserService.ModifyUserAvatar(newFileName, userUuid)
 	if err != nil {
 		c.JSON(http.StatusOK, response.FailMsg(err.Error()))

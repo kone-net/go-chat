@@ -2,9 +2,9 @@ package main
 
 import (
 	"chat-room/config"
-	"chat-room/global/log"
-	"chat-room/router"
-	"chat-room/server"
+	"chat-room/pkg/global/log"
+	"chat-room/internal/router"
+	"chat-room/internal/server"
 	"go.uber.org/zap"
 	"net/http"
 	"time"

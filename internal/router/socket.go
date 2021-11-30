@@ -1,8 +1,8 @@
 package router
 
 import (
-	"chat-room/global/log"
-	"chat-room/server"
+	"chat-room/pkg/global/log"
+	"chat-room/internal/server"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

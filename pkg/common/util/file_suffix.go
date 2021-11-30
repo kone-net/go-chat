@@ -2,7 +2,7 @@ package util
 
 import (
 	"bytes"
-	"chat-room/common/constant"
+	"chat-room/pkg/common/constant"
 	"encoding/hex"
 	"strconv"
 	"strings"

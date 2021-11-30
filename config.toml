@@ -1,13 +1,16 @@
-app_name = "chat_room"
+appName = "chat_room"
 
 [mysql]
 host = "127.0.0.1"
 name = "chat"
 password = "root1234"
 port = 3306
-table_prefix = ""
+tablePrefix = ""
 user = "root"
 
 [log]
 level = "debug"
 path = "logs/chat.log"
+
+[staticPath]
+filePath = "web/static/file/"

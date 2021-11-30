@@ -1,9 +1,9 @@
 package server
 
 import (
-	"chat-room/common/constant"
-	"chat-room/global/log"
-	"chat-room/protocol"
+	"chat-room/pkg/common/constant"
+	"chat-room/pkg/global/log"
+	"chat-room/pkg/protocol"
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/gorilla/websocket"

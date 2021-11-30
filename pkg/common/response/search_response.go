@@ -1,6 +1,6 @@
 package response
 
-import "chat-room/model"
+import "chat-room/internal/model"
 
 type SearchResponse struct {
 	User  model.User  `json:"user"`

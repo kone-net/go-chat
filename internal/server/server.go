@@ -1,11 +1,12 @@
 package server
 
 import (
-	"chat-room/common/constant"
-	"chat-room/common/util"
-	"chat-room/global/log"
-	"chat-room/protocol"
-	"chat-room/service"
+	"chat-room/config"
+	"chat-room/pkg/common/constant"
+	"chat-room/pkg/common/util"
+	"chat-room/pkg/global/log"
+	"chat-room/pkg/protocol"
+	"chat-room/internal/service"
 	"encoding/base64"
 	"io/ioutil"
 	"strings"
@@ -153,7 +154,7 @@ func saveMessage(message *protocol.Message) {
 			log.Error("transfer base64 to file error", log.String("transfer base64 to file error", dataErr.Error()))
 			return
 		}
-		err := ioutil.WriteFile("static/img/"+url, dataBuffer, 0666)
+		err := ioutil.WriteFile(config.GetConfig().StaticPath.FilePath + url, dataBuffer, 0666)
 		if err != nil {
 			log.Error("write file error", log.String("write file error", err.Error()))
 			return
@@ -169,7 +170,7 @@ func saveMessage(message *protocol.Message) {
 		}
 		contentType := util.GetContentTypeBySuffix(fileSuffix)
 		url := uuid.New().String() + "." + fileSuffix
-		err := ioutil.WriteFile("static/img/"+url, message.File, 0666)
+		err := ioutil.WriteFile(config.GetConfig().StaticPath.FilePath + url, message.File, 0666)
 		if err != nil {
 			log.Error("write file error", log.String("write file error", err.Error()))
 			return

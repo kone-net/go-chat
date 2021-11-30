@@ -3,12 +3,12 @@ package service
 import (
 	"time"
 
-	"chat-room/common/request"
-	"chat-room/common/response"
-	"chat-room/dao/pool"
-	"chat-room/errors"
-	"chat-room/global/log"
-	"chat-room/model"
+	"chat-room/pkg/common/request"
+	"chat-room/pkg/common/response"
+	"chat-room/internal/dao/pool"
+	"chat-room/pkg/errors"
+	"chat-room/pkg/global/log"
+	"chat-room/internal/model"
 
 	"github.com/google/uuid"
 )
