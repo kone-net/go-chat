@@ -3,11 +3,11 @@ package v1
 import (
 	"net/http"
 
-	"chat-room/pkg/global/log"
 	"chat-room/internal/model"
+	"chat-room/internal/service"
 	"chat-room/pkg/common/request"
 	"chat-room/pkg/common/response"
-	"chat-room/internal/service"
+	"chat-room/pkg/global/log"
 
 	"github.com/gin-gonic/gin"
 )

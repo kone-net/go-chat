@@ -2,8 +2,8 @@ package service
 
 import (
 	"chat-room/internal/dao/pool"
-	"chat-room/pkg/errors"
 	"chat-room/pkg/common/response"
+	"chat-room/pkg/errors"
 
 	"chat-room/internal/model"
 

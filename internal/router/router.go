@@ -2,8 +2,8 @@ package router
 
 import (
 	"chat-room/api/v1"
-	"chat-room/pkg/global/log"
 	"chat-room/pkg/common/response"
+	"chat-room/pkg/global/log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

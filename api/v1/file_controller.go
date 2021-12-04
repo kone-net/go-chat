@@ -35,10 +35,10 @@ func SaveFile(c *gin.Context) {
 
 	newFileName := namePreffix + suffix
 
-	log.Info("file", log.Any("file name", config.GetConfig().StaticPath.FilePath + newFileName))
+	log.Info("file", log.Any("file name", config.GetConfig().StaticPath.FilePath+newFileName))
 	log.Info("userUuid", log.Any("userUuid name", userUuid))
 
-	c.SaveUploadedFile(file, config.GetConfig().StaticPath.FilePath + newFileName)
+	c.SaveUploadedFile(file, config.GetConfig().StaticPath.FilePath+newFileName)
 	err := service.UserService.ModifyUserAvatar(newFileName, userUuid)
 	if err != nil {
 		c.JSON(http.StatusOK, response.FailMsg(err.Error()))

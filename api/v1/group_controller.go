@@ -2,8 +2,8 @@ package v1
 
 import (
 	"chat-room/internal/model"
-	"chat-room/pkg/common/response"
 	"chat-room/internal/service"
+	"chat-room/pkg/common/response"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

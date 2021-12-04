@@ -1,11 +1,11 @@
 package service
 
 import (
-	"chat-room/pkg/common/constant"
 	"chat-room/internal/dao/pool"
+	"chat-room/pkg/common/constant"
+	"chat-room/pkg/common/response"
 	"chat-room/pkg/errors"
 	"chat-room/pkg/global/log"
-	"chat-room/pkg/common/response"
 	"chat-room/pkg/protocol"
 
 	"chat-room/internal/model"
