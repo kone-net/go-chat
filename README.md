@@ -20,6 +20,7 @@
 * 视频消息
 * 屏幕共享（基于图片）
 * 视频通话（基于WebRTC的p2p视频通话）
+* 分布式部署（通过kafka全局消息队列，统一消息传递，可以水平扩展系统）
 
 ## 后端
 [代码仓库](https://github.com/kone-net/go-chat)
@@ -186,43 +187,61 @@ npm start
 http://127.0.0.1:3000/login
 ```
 
+### 分布式部署
+* 拉取代码
+将代码拉取到服务器，运行make build构建后端代码。
+* 构建后端服务镜像
+进入目录deployments/docker
+通过目录下的Dockerfile构建镜像
+```
+docker build -t konenet/gochat:1.0 .
+```
+* 部署服务
+需要部署nginx进行反向代理，mysql保存数据，1个或者多个后端服务。
+* 在config.toml中配置分布式消息队列
+将msgChannelType中的channelType修改为kafka，就为分布式消息队列。需要填写消息队列对应的地址和topic
+* 启动服务
+通过deployments/docker下的docker-compose.yml进行启动。
+```
+docker-compose up -d
+```
+
 ## 代码结构
 ```
-├── Makefile       代码编译，打包，结构化等操作
+├── Makefile             代码编译，打包，结构化等操作
 ├── README.md
-├── api
-│   └── v1         controller类，对外的接口，如添加好友，查找好友等。所有http请求的入口
-├── bin
-│   └── chat       打包的二进制文件
-├── chat.sql       整个项目的SQL
-├── cmd            main函数入口，程序启动
-├── common     
-│   ├── constant   常量
-│   └── util       工具类
-├── config         配置初始化类
-├── config.toml    配置文件
-├── dao
-│   └── pool       数据库连接池
-├── errors         封装的异常类
-├── global
-│   └── log        封装的日志类，使用时不会出现第三方的包依赖
+├── api                  controller类，对外的接口，如添加好友，查找好友等。所有http请求的入口
+│   └── v1
+├── assets
+│   └── screenshot       系统使用到的资源，markdown用到的截图文件
+├── bin                  打包的二进制文件
+├── chat.sql             整个项目的SQL
+├── cmd
+│   └── main.go          main函数入口，程序启动
+├── config
+│   └── toml_config.go   系统全局的配置文件配置类
+├── config.toml          配置文件
+├── deployments
+│   └── docker           docker构建镜像，docker-compose.yml等文件
 ├── go.mod
 ├── go.sum
-├── logs           日志文件
-├── model          数据库模型，和表一一对应
-│   ├── request    请求的实体类
-│   ├── response   响应的实体类
-├── protocol       消息协议
-│   ├── message.pb.go  protoc buffer自动生成的文件
-│   └── message.proto  定义的protoc buffer字段
-├── response       全局响应，通过http请求的，都包含code，msg，data三个字段
-├── router         gin和controller类进行绑定
-├── server         WebSocket中消息的接受和转发的主要逻辑
-├── service        controller调用的服务类
-├── static         静态文件，图片等
-│   ├── img
-│   └── screenshot markdown用到的截图文件
-└── test           测试文件
+├── internal
+│   ├── dao              数据库
+│   ├── kafka            kafka消费者和生产者
+│   ├── model            数据库模型，和表一一对应
+│   ├── router           gin和controller类进行绑定
+│   ├── server           WebSocket中消息的接受和转发的主要逻辑
+│   └── service          调用的服务类
+├── logs
+├── pkg
+│   ├── common           常量,工具类
+│   ├── errors           封装的异常类
+│   ├── global           封装的日志类，使用时不会出现第三方的包依赖
+│   └── protocol         protoc buffer自动生成的文件,定义的protoc buffer字段
+├── test
+│   └── kafka_test.go
+└── web
+    └── static           上传的文件等
 ```
 
 ## Makefile

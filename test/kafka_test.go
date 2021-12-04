@@ -9,7 +9,7 @@ import (
 )
 
 func TestKafka(t *testing.T) {
-	hosts := "127.0.0.1:9092"
+	hosts := "myAddress:9092"
 	config := sarama.NewConfig()
 	client, _ := sarama.NewClient(strings.Split(hosts, ","), config)
 
@@ -32,9 +32,11 @@ func TestKafka(t *testing.T) {
 }
 
 var consumer sarama.Consumer
+
 type ConsumerCallBack func(data []byte)
+
 func TestKafkaConsumer(t *testing.T) {
-	hosts := "127.0.0.1:9092"
+	hosts := "myAddress:9092"
 	config := sarama.NewConfig()
 	client, _ := sarama.NewClient(strings.Split(hosts, ","), config)
 

@@ -1,6 +1,8 @@
 package server
 
 import (
+	"chat-room/config"
+	"chat-room/internal/kafka"
 	"chat-room/pkg/common/constant"
 	"chat-room/pkg/global/log"
 	"chat-room/pkg/protocol"
@@ -46,7 +48,11 @@ func (c *Client) Read() {
 			}
 			c.Conn.WriteMessage(websocket.BinaryMessage, pongByte)
 		} else {
-			MyServer.Broadcast <- message
+			if config.GetConfig().MsgChannelType.ChannelType == constant.KAFKA {
+				kafka.Send(message)
+			} else {
+				MyServer.Broadcast <- message
+			}
 		}
 	}
 }

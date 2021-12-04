@@ -58,4 +58,4 @@ clean:
 # protoc build
 .PHONY: protoc
 protoc:
-	protoc --gogo_out=. protocol/*.proto
+	protoc --gogo_out=. pkg/protocol/*.proto

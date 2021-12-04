@@ -2,11 +2,11 @@ package server
 
 import (
 	"chat-room/config"
+	"chat-room/internal/service"
 	"chat-room/pkg/common/constant"
 	"chat-room/pkg/common/util"
 	"chat-room/pkg/global/log"
 	"chat-room/pkg/protocol"
-	"chat-room/internal/service"
 	"encoding/base64"
 	"io/ioutil"
 	"strings"
@@ -34,6 +34,11 @@ func NewServer() *Server {
 		Register:  make(chan *Client),
 		Ungister:  make(chan *Client),
 	}
+}
+
+// 消费kafka里面的消息, 然后直接放入go channel中统一进行消费
+func ConsumerKafkaMsg(data []byte) {
+	MyServer.Broadcast <- data
 }
 
 func (s *Server) Start() {
@@ -154,7 +159,7 @@ func saveMessage(message *protocol.Message) {
 			log.Error("transfer base64 to file error", log.String("transfer base64 to file error", dataErr.Error()))
 			return
 		}
-		err := ioutil.WriteFile(config.GetConfig().StaticPath.FilePath + url, dataBuffer, 0666)
+		err := ioutil.WriteFile(config.GetConfig().StaticPath.FilePath+url, dataBuffer, 0666)
 		if err != nil {
 			log.Error("write file error", log.String("write file error", err.Error()))
 			return
@@ -170,7 +175,7 @@ func saveMessage(message *protocol.Message) {
 		}
 		contentType := util.GetContentTypeBySuffix(fileSuffix)
 		url := uuid.New().String() + "." + fileSuffix
-		err := ioutil.WriteFile(config.GetConfig().StaticPath.FilePath + url, message.File, 0666)
+		err := ioutil.WriteFile(config.GetConfig().StaticPath.FilePath+url, message.File, 0666)
 		if err != nil {
 			log.Error("write file error", log.String("write file error", err.Error()))
 			return
