@@ -42,11 +42,11 @@ func ConsumerKafkaMsg(data []byte) {
 }
 
 func (s *Server) Start() {
-	log.Info("start server", log.Any("start server", "start server..."))
+	log.Logger.Info("start server", log.Any("start server", "start server..."))
 	for {
 		select {
 		case conn := <-s.Register:
-			log.Info("login", log.Any("login", "new user login in"+conn.Name))
+			log.Logger.Info("login", log.Any("login", "new user login in"+conn.Name))
 			s.Clients[conn.Name] = conn
 			msg := &protocol.Message{
 				From:    "System",
@@ -57,7 +57,7 @@ func (s *Server) Start() {
 			conn.Send <- protoMsg
 
 		case conn := <-s.Ungister:
-			log.Info("loginout", log.Any("loginout", conn.Name))
+			log.Logger.Info("loginout", log.Any("loginout", conn.Name))
 			if _, ok := s.Clients[conn.Name]; ok {
 				close(conn.Send)
 				delete(s.Clients, conn.Name)
@@ -99,7 +99,7 @@ func (s *Server) Start() {
 			} else {
 				// 无对应接受人员进行广播
 				for id, conn := range s.Clients {
-					log.Info("allUser", log.Any("allUser", id))
+					log.Logger.Info("allUser", log.Any("allUser", id))
 
 					select {
 					case conn.Send <- message:
@@ -161,12 +161,12 @@ func saveMessage(message *protocol.Message) {
 
 		dataBuffer, dataErr := base64.StdEncoding.DecodeString(content)
 		if dataErr != nil {
-			log.Error("transfer base64 to file error", log.String("transfer base64 to file error", dataErr.Error()))
+			log.Logger.Error("transfer base64 to file error", log.String("transfer base64 to file error", dataErr.Error()))
 			return
 		}
 		err := ioutil.WriteFile(config.GetConfig().StaticPath.FilePath+url, dataBuffer, 0666)
 		if err != nil {
-			log.Error("write file error", log.String("write file error", err.Error()))
+			log.Logger.Error("write file error", log.String("write file error", err.Error()))
 			return
 		}
 		message.Url = url
@@ -182,7 +182,7 @@ func saveMessage(message *protocol.Message) {
 		url := uuid.New().String() + "." + fileSuffix
 		err := ioutil.WriteFile(config.GetConfig().StaticPath.FilePath+url, message.File, 0666)
 		if err != nil {
-			log.Error("write file error", log.String("write file error", err.Error()))
+			log.Logger.Error("write file error", log.String("write file error", err.Error()))
 			return
 		}
 		message.Url = url

@@ -27,7 +27,7 @@ func (c *Client) Read() {
 		c.Conn.PongHandler()
 		_, message, err := c.Conn.ReadMessage()
 		if err != nil {
-			log.Error("client read message error", log.Any("client read message error", err.Error()))
+			log.Logger.Error("client read message error", log.Any("client read message error", err.Error()))
 			MyServer.Ungister <- c
 			c.Conn.Close()
 			break
@@ -44,7 +44,7 @@ func (c *Client) Read() {
 			}
 			pongByte, err2 := proto.Marshal(pong)
 			if nil != err2 {
-				log.Error("client marshal message error", log.Any("client marshal message error", err2.Error()))
+				log.Logger.Error("client marshal message error", log.Any("client marshal message error", err2.Error()))
 			}
 			c.Conn.WriteMessage(websocket.BinaryMessage, pongByte)
 		} else {

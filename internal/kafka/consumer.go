@@ -15,12 +15,12 @@ func InitConsumer(hosts string) {
 	config := sarama.NewConfig()
 	client, err := sarama.NewClient(strings.Split(hosts, ","), config)
 	if nil != err {
-		log.Error("init kafka consumer client error", log.Any("init kafka consumer client error", err.Error()))
+		log.Logger.Error("init kafka consumer client error", log.Any("init kafka consumer client error", err.Error()))
 	}
 
 	consumer, err = sarama.NewConsumerFromClient(client)
 	if nil != err {
-		log.Error("init kafka consumer error", log.Any("init kafka consumer error", err.Error()))
+		log.Logger.Error("init kafka consumer error", log.Any("init kafka consumer error", err.Error()))
 	}
 }
 
@@ -28,7 +28,7 @@ func InitConsumer(hosts string) {
 func ConsumerMsg(callBack ConsumerCallback) {
 	partitionConsumer, err := consumer.ConsumePartition(topic, 0, sarama.OffsetNewest)
 	if nil != err {
-		log.Error("iConsumePartition error", log.Any("ConsumePartition error", err.Error()))
+		log.Logger.Error("iConsumePartition error", log.Any("ConsumePartition error", err.Error()))
 		return
 	}
 

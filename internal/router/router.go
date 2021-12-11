@@ -64,7 +64,7 @@ func Cors() gin.HandlerFunc {
 
 		defer func() {
 			if err := recover(); err != nil {
-				log.Error("HttpError", zap.Any("HttpError", err))
+				log.Logger.Error("HttpError", zap.Any("HttpError", err))
 			}
 		}()
 
@@ -75,7 +75,7 @@ func Cors() gin.HandlerFunc {
 func Recovery(c *gin.Context) {
 	defer func() {
 		if r := recover(); r != nil {
-			log.Error("gin catch error: ", log.Any("gin catch error: ", r))
+			log.Logger.Error("gin catch error: ", log.Any("gin catch error: ", r))
 			c.JSON(http.StatusOK, response.FailMsg("系统内部错误"))
 		}
 	}()

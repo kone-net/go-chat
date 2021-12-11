@@ -9,13 +9,11 @@ import (
 	"chat-room/pkg/global/log"
 	"net/http"
 	"time"
-
-	"go.uber.org/zap"
 )
 
 func main() {
 	log.InitLogger(config.GetConfig().Log.Path, config.GetConfig().Log.Level)
-	log.Info("config", zap.Any("config", config.GetConfig()))
+	log.Logger.Info("config", log.Any("config", config.GetConfig()))
 
 	if config.GetConfig().MsgChannelType.ChannelType == constant.KAFKA {
 		kafka.InitProducer(config.GetConfig().MsgChannelType.KafkaTopic, config.GetConfig().MsgChannelType.KafkaHosts)
@@ -23,7 +21,7 @@ func main() {
 		go kafka.ConsumerMsg(server.ConsumerKafkaMsg)
 	}
 
-	log.Info("start server", zap.String("start", "start web sever..."))
+	log.Logger.Info("start server", log.String("start", "start web sever..."))
 
 	newRouter := router.NewRouter()
 
@@ -38,6 +36,6 @@ func main() {
 	}
 	err := s.ListenAndServe()
 	if nil != err {
-		log.Error("server error", zap.Any("serverError", err))
+		log.Logger.Error("server error", log.Any("serverError", err))
 	}
 }

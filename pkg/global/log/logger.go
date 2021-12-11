@@ -11,7 +11,7 @@ import (
 type Field = zap.Field
 
 var (
-	log     *zap.Logger
+	Logger     *zap.Logger
 	String  = zap.String
 	Any     = zap.Any
 	Int     = zap.Int
@@ -22,17 +22,17 @@ var (
 // 	InitLogger("./logs/chat.log", "debug")
 // }
 
-func Debug(msg string, fields ...Field) {
-	log.Debug(msg, fields...)
-}
+// func Debug(msg string, fields ...Field) {
+// 	Logger.Debug(msg, fields...)
+// }
 
-func Info(msg string, fields ...Field) {
-	log.Info(msg, fields...)
-}
+// func Info(msg string, fields ...Field) {
+// 	Logger.Info(msg, fields...)
+// }
 
-func Error(msg string, fields ...Field) {
-	log.Error(msg, fields...)
-}
+// func Error(msg string, fields ...Field) {
+// 	Logger.Error(msg, fields...)
+// }
 
 // logpath 日志文件路径
 // loglevel 日志级别
@@ -99,6 +99,6 @@ func InitLogger(logpath string, loglevel string) {
 	// 设置初始化字段,如：添加一个服务器名称
 	filed := zap.Fields(zap.String("application", "chat-room"))
 	// 构造日志
-	log = zap.New(core, caller, development, filed)
-	log.Info("Logger init success")
+	Logger = zap.New(core, caller, development, filed)
+	Logger.Info("Logger init success")
 }

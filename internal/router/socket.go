@@ -21,7 +21,7 @@ func RunSocekt(c *gin.Context) {
 	if user == "" {
 		return
 	}
-	log.Info("newUser", zap.String("newUser", user))
+	log.Logger.Info("newUser", zap.String("newUser", user))
 	ws, err := upGrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		return

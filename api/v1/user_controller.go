@@ -16,7 +16,7 @@ func Login(c *gin.Context) {
 	var user model.User
 	// c.BindJSON(&user)
 	c.ShouldBindJSON(&user)
-	log.Debug("user", log.Any("user", user))
+	log.Logger.Debug("user", log.Any("user", user))
 
 	if service.UserService.Login(&user) {
 		c.JSON(http.StatusOK, response.SuccessMsg(user))
@@ -41,7 +41,7 @@ func Register(c *gin.Context) {
 func ModifyUserInfo(c *gin.Context) {
 	var user model.User
 	c.ShouldBindJSON(&user)
-	log.Debug("user", log.Any("user", user))
+	log.Logger.Debug("user", log.Any("user", user))
 	if err := service.UserService.ModifyUserInfo(&user); err != nil {
 		c.JSON(http.StatusOK, response.FailMsg(err.Error()))
 		return

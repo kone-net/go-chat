@@ -35,12 +35,12 @@ func (u *userService) Register(user *model.User) error {
 
 func (u *userService) Login(user *model.User) bool {
 	pool.GetDB().AutoMigrate(&user)
-	log.Debug("user", log.Any("user in service", user))
+	log.Logger.Debug("user", log.Any("user in service", user))
 	db := pool.GetDB()
 
 	var queryUser *model.User
 	db.First(&queryUser, "username = ?", user.Username)
-	log.Debug("queryUser", log.Any("queryUser", queryUser))
+	log.Logger.Debug("queryUser", log.Any("queryUser", queryUser))
 
 	user.Uuid = queryUser.Uuid
 
@@ -51,7 +51,7 @@ func (u *userService) ModifyUserInfo(user *model.User) error {
 	var queryUser *model.User
 	db := pool.GetDB()
 	db.First(&queryUser, "username = ?", user.Username)
-	log.Debug("queryUser", log.Any("queryUser", queryUser))
+	log.Logger.Debug("queryUser", log.Any("queryUser", queryUser))
 	var nullId int32 = 0
 	if nullId == queryUser.Id {
 		return errors.New("用户不存在")
@@ -107,7 +107,7 @@ func (u *userService) AddFriend(userFriendRequest *request.FriendRequest) error 
 	var queryUser *model.User
 	db := pool.GetDB()
 	db.First(&queryUser, "uuid = ?", userFriendRequest.Uuid)
-	log.Debug("queryUser", log.Any("queryUser", queryUser))
+	log.Logger.Debug("queryUser", log.Any("queryUser", queryUser))
 	var nullId int32 = 0
 	if nullId == queryUser.Id {
 		return errors.New("用户不存在")
@@ -132,7 +132,7 @@ func (u *userService) AddFriend(userFriendRequest *request.FriendRequest) error 
 
 	db.AutoMigrate(&userFriend)
 	db.Save(&userFriend)
-	log.Debug("userFriend", log.Any("userFriend", userFriend))
+	log.Logger.Debug("userFriend", log.Any("userFriend", userFriend))
 
 	return nil
 }

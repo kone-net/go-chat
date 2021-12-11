@@ -17,7 +17,7 @@ import (
 // 前端通过文件名称获取文件流，显示文件
 func GetFile(c *gin.Context) {
 	fileName := c.Param("fileName")
-	log.Info(fileName)
+	log.Logger.Info(fileName)
 	data, _ := ioutil.ReadFile(config.GetConfig().StaticPath.FilePath + fileName)
 	c.Writer.Write(data)
 }
@@ -35,8 +35,8 @@ func SaveFile(c *gin.Context) {
 
 	newFileName := namePreffix + suffix
 
-	log.Info("file", log.Any("file name", config.GetConfig().StaticPath.FilePath+newFileName))
-	log.Info("userUuid", log.Any("userUuid name", userUuid))
+	log.Logger.Info("file", log.Any("file name", config.GetConfig().StaticPath.FilePath+newFileName))
+	log.Logger.Info("userUuid", log.Any("userUuid name", userUuid))
 
 	c.SaveUploadedFile(file, config.GetConfig().StaticPath.FilePath+newFileName)
 	err := service.UserService.ModifyUserAvatar(newFileName, userUuid)

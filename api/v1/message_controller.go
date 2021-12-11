@@ -13,13 +13,13 @@ import (
 
 // 获取消息列表
 func GetMessage(c *gin.Context) {
-	log.Info(c.Query("uuid"))
+	log.Logger.Info(c.Query("uuid"))
 	var messageRequest request.MessageRequest
 	err := c.BindQuery(&messageRequest)
 	if nil != err {
-		log.Error("bindQueryError", log.Any("bindQueryError", err))
+		log.Logger.Error("bindQueryError", log.Any("bindQueryError", err))
 	}
-	log.Info("messageRequest params: ", log.Any("messageRequest", messageRequest))
+	log.Logger.Info("messageRequest params: ", log.Any("messageRequest", messageRequest))
 
 	messages, err := service.MessageService.GetMessages(messageRequest)
 	if err != nil {

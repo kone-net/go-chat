@@ -81,7 +81,7 @@ func (m *messageService) SaveMessage(message protocol.Message) {
 	var fromUser model.User
 	db.Find(&fromUser, "uuid = ?", message.From)
 	if NULL_ID == fromUser.Id {
-		log.Error("SaveMessage not find from user", log.Any("SaveMessage not find from user", fromUser.Id))
+		log.Logger.Error("SaveMessage not find from user", log.Any("SaveMessage not find from user", fromUser.Id))
 		return
 	}
 

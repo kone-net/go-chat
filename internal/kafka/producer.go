@@ -16,12 +16,12 @@ func InitProducer(topicInput, hosts string) {
 	config.Producer.Compression = sarama.CompressionGZIP
 	client, err := sarama.NewClient(strings.Split(hosts, ","), config)
 	if nil != err {
-		log.Error("init kafka client error", log.Any("init kafka client error", err.Error()))
+		log.Logger.Error("init kafka client error", log.Any("init kafka client error", err.Error()))
 	}
 
 	producer, err = sarama.NewAsyncProducerFromClient(client)
 	if nil != err {
-		log.Error("init kafka async client error", log.Any("init kafka async client error", err.Error()))
+		log.Logger.Error("init kafka async client error", log.Any("init kafka async client error", err.Error()))
 	}
 }
 
