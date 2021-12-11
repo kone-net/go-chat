@@ -70,7 +70,12 @@ func (s *Server) Start() {
 			if msg.To != "" {
 				// 一般消息，比如文本消息，视频文件消息等
 				if msg.ContentType >= constant.TEXT && msg.ContentType <= constant.VIDEO {
-					saveMessage(msg)
+					// 保存消息只会在存在socket的一个端上进行保存，防止分布式部署后，消息重复问题
+					_, exits := s.Clients[msg.From]
+					if exits {
+						saveMessage(msg)
+					}
+
 					if msg.MessageType == constant.MESSAGE_TYPE_USER {
 						client, ok := s.Clients[msg.To]
 						if ok {

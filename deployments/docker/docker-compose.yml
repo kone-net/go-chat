@@ -1,6 +1,24 @@
 version: '3'
  
 services:
+    zookeeper:
+        image: zookeeper
+        ports:
+          - 2182:2181
+
+    kafka:
+        image: wurstmeister/kafka
+        ports:
+            - 9092:9092
+        environment:
+            KAFKA_BROKER_ID: 0
+            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://192.168.1.12:9092 # 物理机地址
+            KAFKA_CREATE_TOPICS: "go-chat-message:2:0"   # kafka启动后初始化一个有2个partition(分区)0个副本名叫go-chat-message的topic
+            KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+            KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+        depends_on:
+            - zookeeper
+
     mysql8:
         image: mysql:8.0
         container_name: mysql8
@@ -43,8 +61,10 @@ services:
             - 8888:8888
         links: 
             - mysql8
+            - kafka
         depends_on: 
             - mysql8
+            - kafka
 
     gochat1:
         image: konenet/gochat:1.0
@@ -52,5 +72,7 @@ services:
         container_name: gochat1
         links: 
             - mysql8
+            - kafka
         depends_on: 
             - mysql8
+            - kafka

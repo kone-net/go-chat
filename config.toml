@@ -18,5 +18,5 @@ filePath = "web/static/file/"
 [msgChannelType]
 channelType = "gochannel"
 
-kafkaHosts = "myAddress:9092"
+kafkaHosts = "kafka:9092"
 kafkaTopic = "go-chat-message"

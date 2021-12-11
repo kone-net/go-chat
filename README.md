@@ -200,11 +200,36 @@ docker build -t konenet/gochat:1.0 .
 需要部署nginx进行反向代理，mysql保存数据，1个或者多个后端服务。
 * 在config.toml中配置分布式消息队列
 将msgChannelType中的channelType修改为kafka，就为分布式消息队列。需要填写消息队列对应的地址和topic
+```toml
+appName = "chat_room"
+
+[mysql]
+host = "mysql8"
+name = "go-chat-message"
+password = "thepswdforroot"
+port = 3306
+tablePrefix = ""
+user = "root"
+
+[log]
+level = "debug"
+path = "logs/chat.log"
+
+[staticPath]
+filePath = "web/static/file/"
+
+[msgChannelType]
+channelType = "kafka"
+
+kafkaHosts = "kafka:9092"
+kafkaTopic = "go-chat-message"
+```
 * 启动服务
 通过deployments/docker下的docker-compose.yml进行启动。
 ```
 docker-compose up -d
 ```
+* 注意：分布式部署后，上传的文件视频等，可能会因为负载到不同的机器上，导致文件找不到的情况，所以需要一个在线或者分布式文件服务器。
 
 ## 代码结构
 ```

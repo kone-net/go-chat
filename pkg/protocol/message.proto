@@ -8,7 +8,7 @@ message Message {
     string to = 4;           // 发送给对端用户的uuid
     string content = 5;      // 文本消息内容
     int32 contentType = 6;   // 消息内容类型：1.文字 2.普通文件 3.图片 4.音频 5.视频 6.语音聊天 7.视频聊天
-    string type = 7;         // 如果是心跳消息，该内容为heatbeat
+    string type = 7;         // 消息传输类型：如果是心跳消息，该内容为heatbeat,在线视频或者音频为webrtc
     int32 messageType = 8;   // 消息类型，1.单聊 2.群聊
     string url = 9;          // 图片，视频，语音的路径
     string fileSuffix = 10;  // 文件后缀，如果通过二进制头不能解析文件后缀，使用该后缀
