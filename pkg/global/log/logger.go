@@ -11,28 +11,12 @@ import (
 type Field = zap.Field
 
 var (
-	Logger     *zap.Logger
+	Logger  *zap.Logger
 	String  = zap.String
 	Any     = zap.Any
 	Int     = zap.Int
 	Float32 = zap.Float32
 )
-
-// func init() {
-// 	InitLogger("./logs/chat.log", "debug")
-// }
-
-// func Debug(msg string, fields ...Field) {
-// 	Logger.Debug(msg, fields...)
-// }
-
-// func Info(msg string, fields ...Field) {
-// 	Logger.Info(msg, fields...)
-// }
-
-// func Error(msg string, fields ...Field) {
-// 	Logger.Error(msg, fields...)
-// }
 
 // logpath 日志文件路径
 // loglevel 日志级别
@@ -59,6 +43,8 @@ func InitLogger(logpath string, loglevel string) {
 		level = zap.InfoLevel
 	case "error":
 		level = zap.ErrorLevel
+	case "warn":
+		level = zap.WarnLevel
 	default:
 		level = zap.InfoLevel
 	}
