@@ -167,14 +167,20 @@ go run cmd/main.go
 git clone https://github.com/kone-net/go-chat-web
 ```
 
+进入目录
+```shell
+cd go-chat-web
+```
+
 安装前端基本依赖
 ```shell
 npm install
 ```
 
 如果后端地址或者端口号需要修改
+放在服务器运行时一定需要修改后端地址
 ```shell
-修改src/common/param/Params.jsx里面的IP_PORT
+修改src/chat/common/param/Params.jsx里面的IP_PORT
 ```
 
 运行前端代码默认启动端口是3000
