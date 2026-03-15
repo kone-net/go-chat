@@ -1,5 +1,6 @@
 syntax = "proto3";
 package protocol;
+option go_package = "pkg/protocol";
 
 message Message {
     string avatar = 1;       //头像

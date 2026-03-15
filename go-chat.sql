@@ -1,4 +1,4 @@
-CREATE DATABASE chat;
+CREATE DATABASE IF NOT EXISTS `go-chat`;
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
@@ -17,6 +17,8 @@ CREATE TABLE IF NOT EXISTS `users` (
     UNIQUE KEY `idx_uuid` (`uuid`),
     UNIQUE KEY `username_2` (`username`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT '用户表';
+INSERT INTO `users` VALUES (1, '860dac42-e0a8-4aa5-9c47-403dc1af107e', 'user001', 'user001', 'user001', 'user001', '', NOW(), NULL, 0);
+INSERT INTO `users` VALUES (2, '6e21f12a-7452-41b6-ac7c-4c2e5fb10ad7', 'user002', 'user002', 'user002', 'user002', '', NOW(), NULL, 0);
 
 
 DROP TABLE IF EXISTS `user_friends`;

@@ -8,12 +8,12 @@ import (
 	"chat-room/pkg/global/log"
 	"chat-room/pkg/protocol"
 	"encoding/base64"
-	"io/ioutil"
+	"os"
 	"strings"
 	"sync"
 
-	"github.com/gogo/protobuf/proto"
 	"github.com/google/uuid"
+	"google.golang.org/protobuf/proto"
 )
 
 var MyServer = NewServer()
@@ -76,7 +76,8 @@ func (s *Server) Start() {
 						saveMessage(msg)
 					}
 
-					if msg.MessageType == constant.MESSAGE_TYPE_USER {
+					switch msg.MessageType {
+					case constant.MESSAGE_TYPE_USER:
 						client, ok := s.Clients[msg.To]
 						if ok {
 							msgByte, err := proto.Marshal(msg)
@@ -84,7 +85,7 @@ func (s *Server) Start() {
 								client.Send <- msgByte
 							}
 						}
-					} else if msg.MessageType == constant.MESSAGE_TYPE_GROUP {
+					case constant.MESSAGE_TYPE_GROUP:
 						sendGroupMessage(msg, s)
 					}
 				} else {
@@ -151,7 +152,8 @@ func sendGroupMessage(msg *protocol.Message, s *Server) {
 // 保存消息，如果是文本消息直接保存，如果是文件，语音等消息，保存文件后，保存对应的文件路径
 func saveMessage(message *protocol.Message) {
 	// 如果上传的是base64字符串文件，解析文件保存
-	if message.ContentType == 2 {
+	switch message.ContentType {
+	case constant.FILE:
 		url := uuid.New().String() + ".png"
 		index := strings.Index(message.Content, "base64")
 		index += 7
@@ -164,14 +166,14 @@ func saveMessage(message *protocol.Message) {
 			log.Logger.Error("transfer base64 to file error", log.String("transfer base64 to file error", dataErr.Error()))
 			return
 		}
-		err := ioutil.WriteFile(config.GetConfig().StaticPath.FilePath+url, dataBuffer, 0666)
+		err := os.WriteFile(config.GetConfig().StaticPath.FilePath+url, dataBuffer, 0666)
 		if err != nil {
 			log.Logger.Error("write file error", log.String("write file error", err.Error()))
 			return
 		}
 		message.Url = url
 		message.Content = ""
-	} else if message.ContentType == 3 {
+	case constant.IMAGE:
 		// 普通的文件二进制上传
 		fileSuffix := util.GetFileType(message.File)
 		nullStr := ""
@@ -180,7 +182,7 @@ func saveMessage(message *protocol.Message) {
 		}
 		contentType := util.GetContentTypeBySuffix(fileSuffix)
 		url := uuid.New().String() + "." + fileSuffix
-		err := ioutil.WriteFile(config.GetConfig().StaticPath.FilePath+url, message.File, 0666)
+		err := os.WriteFile(config.GetConfig().StaticPath.FilePath+url, message.File, 0666)
 		if err != nil {
 			log.Logger.Error("write file error", log.String("write file error", err.Error()))
 			return
@@ -190,5 +192,5 @@ func saveMessage(message *protocol.Message) {
 		message.ContentType = contentType
 	}
 
-	service.MessageService.SaveMessage(*message)
+	service.MessageService.SaveMessage(message)
 }

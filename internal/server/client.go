@@ -7,8 +7,8 @@ import (
 	"chat-room/pkg/global/log"
 	"chat-room/pkg/protocol"
 
-	"github.com/gogo/protobuf/proto"
 	"github.com/gorilla/websocket"
+	"google.golang.org/protobuf/proto"
 )
 
 type Client struct {

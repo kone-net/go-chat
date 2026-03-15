@@ -7,8 +7,6 @@ import (
 	"strconv"
 	"strings"
 	"sync"
-
-	"github.com/wxnacy/wgo/arrays"
 )
 
 var fileTypeMap sync.Map
@@ -84,7 +82,7 @@ func init() {
 // 获取前面结果字节的二进制
 func bytesToHexString(src []byte) string {
 	res := bytes.Buffer{}
-	if src == nil || len(src) <= 0 {
+	if len(src) <= 0 {
 		return ""
 	}
 	temp := make([]byte, 0)
@@ -120,21 +118,31 @@ func GetFileType(fSrc []byte) string {
 
 func GetContentTypeBySuffix(suffix string) int32 {
 	imgList := []string{"jpeg", "jpg", "png", "gif", "tif", "bmp", "dwg"}
-	exists := arrays.Contains(imgList, suffix)
+	exists := Contains(imgList, suffix)
 	if exists >= 0 {
 		return constant.IMAGE
 	}
 
 	audioList := []string{"mp3", "wma", "wav", "mid", "ape", "flac"}
-	existAudio := arrays.Contains(audioList, suffix)
+	existAudio := Contains(audioList, suffix)
 	if existAudio >= 0 {
 		return constant.AUDIO
 	}
 
 	videoList := []string{"rmvb", "flv", "mp4", "mpg", "mpeg", "avi", "rm", "mov", "wmv", "webm"}
-	existVideo := arrays.Contains(videoList, suffix)
+	existVideo := Contains(videoList, suffix)
 	if existVideo >= 0 {
 		return constant.VIDEO
 	}
 	return constant.FILE
+}
+
+// 判断字符串切片是否包含某个元素
+func Contains(slice []string, element string) int {
+	for i, e := range slice {
+		if e == element {
+			return i
+		}
+	}
+	return -1
 }

@@ -11,7 +11,7 @@ coverage.*
 y.output
 
 .DS_Store
-.vscode/
+# .vscode/
 .idea
 _tools/
 

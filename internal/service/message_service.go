@@ -76,7 +76,7 @@ func fetchGroupMessage(db *gorm.DB, toUuid string) ([]response.MessageResponse, 
 	return messages, nil
 }
 
-func (m *messageService) SaveMessage(message protocol.Message) {
+func (m *messageService) SaveMessage(message *protocol.Message) {
 	db := pool.GetDB()
 	var fromUser model.User
 	db.Find(&fromUser, "uuid = ?", message.From)
